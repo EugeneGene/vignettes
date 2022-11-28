@@ -1,0 +1,67 @@
+---
+title: "First Vignette"
+output: html_notebook
+---
+
+# Load a model
+
+```{r}
+library(mrgsolve)
+```
+
+we'll use the mread() function to read, parse, compile and load a model out of the internal model library. Try calling the modlib function (modlib()) and see that the path to the installed package is returned, pointing to a directory of pre-coded models. These models are good to try when learning mrgsolve.
+
+For this first example, we're using a one compartment model (called pk1 in the model library)
+
+```{r}
+mod <- modlib("pk1")
+```
+
+Once we create the model object (`mod`) we can extract certain information about the model. For example, get an overview
+
+```{r}
+mod
+```
+
+Or look at model parameters and their values
+
+```{r}
+param(mod)
+```
+
+We'll see in the section below how to run a simulation from this model. But first, let's create a dosing intervention to use with this model.
+
+# **Create an intervention**
+
+The simplest way to create an intervention is to use an event object. This is just a simple expression of one or more model interventions (most frequently doses)
+
+```{r}
+evnt <- ev(amt = 100, ii = 24, addl = 9)
+```
+
+We'll see in other vignettes how to create more-complicated events as well as how to create larger data sets with many individuals in them.
+
+For now, the event object is just an intervention that we can combine with a model.
+
+# **Simulate**
+
+To simulate, use the `mrgsim()` function.
+
+```{r}
+out <- mod %>% ev(evnt) %>% mrgsim(end = 480, delta = 0.1)
+
+```
+
+We use a pipe sequence here (`%>%`) to pass the model object (`mod)` into the event function (`ev()`) where we attach the dosing intervention, and that result gets passed into the simulation function. The result of the simulation function is essentially a data frame of simulated values
+
+```{r}
+out
+```
+
+# **Plot**
+
+mrgsolve comes with several different functions for processing output. One simple function is a plot method that will generate a plot of what was just simulated
+
+```{r}
+plot(out)
+```
