@@ -1,0 +1,15 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# **Work with event objects**
+
+```{r}
+library(mrgsolve)
+library(dplyr)
+```
+
+# Note
+
+Have to install `dplyr`
